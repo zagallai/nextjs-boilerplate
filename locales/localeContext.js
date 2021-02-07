@@ -1,9 +1,10 @@
+import React from "react";
 import { useRouter } from "next/dist/client/router";
 import { isAllowedLocale, localeCookiesAge } from "./config";
-import cookies from 'js-cookies';
+import cookies from "js-cookies";
 export const LocaleContext = React.createContext({
   locale: "en",
-  setLocale: () => null
+  setLocale: () => null,
 });
 
 export const LocaleProvider = ({ lang, children }) => {
@@ -12,13 +13,17 @@ export const LocaleProvider = ({ lang, children }) => {
   // store the preference
   React.useEffect(() => {
     if (locale !== cookies.getItem("locale")) {
-      cookies.setItem("locale", locale, localeCookiesAge,'/');
+      cookies.setItem("locale", locale, localeCookiesAge, "/");
     }
   }, [locale]);
   // sync locale value on client-side route changes
   React.useEffect(() => {
     const { query } = router;
-    if (typeof query.lang === 'string' && isAllowedLocale(query.lang) && locale !== query.lang) {
+    if (
+      typeof query.lang === "string" &&
+      isAllowedLocale(query.lang) &&
+      locale !== query.lang
+    ) {
       setLocale(query.lang);
     }
   }, [router, locale]);
